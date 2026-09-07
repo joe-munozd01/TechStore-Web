@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore - Soporte</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/estilo.css">
+    <script src="js/formularios.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1><a href="index.html">TechStore</a></h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="carrito.html">Carrito</a></li>
+                <li><a href="registro.html">Registrarse</a></li>
+                <li><a href="soporte.html">Soporte</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="soporte">
+            <h2>Centro de soporte</h2>
+            <p>¿Tienes un problema con tu pedido o una consulta? Escríbenos y generaremos un ticket de soporte.</p>
+
+            <form id="formulario_soporte">
+                <fieldset>
+                    <legend>Formulario de contacto</legend>
+
+                    <label for="snombre">Nombre:</label>
+                    <input type="text" name="snombre" id="snombre" placeholder="Tu nombre" autocomplete="name">
+                    <span id="mensaje_snombre" class="mensaje-error"></span>
+
+                    <label for="scorreo">Correo electrónico:</label>
+                    <input type="text" name="scorreo" id="scorreo" placeholder="tucorreo@correo.cl" autocomplete="email">
+                    <span id="mensaje_scorreo" class="mensaje-error"></span>
+
+                    <label for="sasunto">Asunto:</label>
+                    <input type="text" name="sasunto" id="sasunto" placeholder="Ej: Problema con mi despacho" list="sugerencias_asunto" autocomplete="off">
+                    <datalist id="sugerencias_asunto">
+                        <option value="Problema con mi pedido">
+                        <option value="Consulta sobre despacho">
+                        <option value="Solicitud de cambio o devolución">
+                        <option value="Problema con el pago">
+                        <option value="Otro">
+                    </datalist>
+
+                    <label for="smensaje">Mensaje:</label>
+                    <textarea name="smensaje" id="smensaje" rows="5" placeholder="Cuéntanos en qué te podemos ayudar"></textarea>
+                    <span id="mensaje_smensaje" class="mensaje-error"></span>
+
+                    <br><br>
+                    <button type="reset" id="blimpiar_soporte">Limpiar</button>
+                    <button type="button" id="benviar_soporte" onclick="procesarSoporte()">Enviar</button>
+
+                    <p id="mensaje_resultado_soporte"></p>
+                </fieldset>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>TechStore &copy; 2026 - Proyecto académico 011D Desarrollo FullStack II</p>
+        <p>Contacto: contacto@techstore.cl | <a href="soporte.html">Centro de soporte</a></p>
+    </footer>
+
+</body>
+</html>

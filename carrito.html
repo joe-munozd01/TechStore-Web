@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore - Carrito</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/estilo.css">
+    <script src="js/carrito.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1><a href="index.html">TechStore</a></h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="carrito.html">Carrito</a></li>
+                <li><a href="registro.html">Registrarse</a></li>
+                <li><a href="soporte.html">Soporte</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="carrito-compra">
+            <h2>Mi carrito de compra</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo_tabla_carrito">
+                    <!-- Se llena automáticamente con carrito.js -->
+                </tbody>
+            </table>
+
+            <p>Total: <span id="total_carrito" class="precio">$0</span></p>
+
+            <button type="button" onclick="agregarProductoDeEjemplo()">Agregar Teclado Mecánico RGB</button>
+            <button type="button" onclick="generarOrden()">Generar orden</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>TechStore &copy; 2026 - Proyecto académico 011D Desarrollo FullStack II</p>
+        <p>Contacto: contacto@techstore.cl | <a href="soporte.html">Centro de soporte</a></p>
+    </footer>
+
+</body>
+</html>
