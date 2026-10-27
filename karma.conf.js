@@ -1,3 +1,5 @@
+const path = require("path");
+
 // Configuración de Karma: ejecuta las pruebas Jasmine (tests/**/*.spec.jsx).
 // webpack + babel convierten el JSX; jsdom simula el navegador (DOM) sin abrir ventanas.
 module.exports = function (config) {
@@ -9,7 +11,11 @@ module.exports = function (config) {
     webpack: {
       mode: "development",
       devtool: false,
-      resolve: { extensions: [".js", ".jsx"] },
+      resolve: {
+        extensions: [".js", ".jsx"],
+        // Mock: en las pruebas, next/link se reemplaza por un <a> simple.
+        alias: { "next/link": path.resolve(__dirname, "tests/mocks/NextLinkMock.jsx") },
+      },
       module: {
         rules: [
           {
@@ -23,7 +29,7 @@ module.exports = function (config) {
                   ["@babel/preset-react", { runtime: "automatic" }],
                 ],
                 // Mide la cobertura del código (components/ y data/), no de los tests.
-                plugins: [["istanbul", { exclude: ["tests/**", "**/*.spec.jsx"] }]],
+                plugins: [["istanbul", { exclude: ["tests/**", "**/*.spec.jsx", "**/NextLinkMock.jsx"] }]],
               },
             },
           },

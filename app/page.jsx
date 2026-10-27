@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { obtenerProductos } from "../data/productos";
-import ProductList from "../components/ProductList";
+import ProductosDestacados from "../components/ProductosDestacados";
 
 export default function Home() {
   const destacados = obtenerProductos().slice(0, 3);
@@ -12,7 +12,7 @@ export default function Home() {
         <Link href="/productos" className="btn btn-primary">Ver productos</Link>
       </section>
       <h2 className="h4 mb-3">Productos destacados</h2>
-      <ProductList productos={destacados} />
+      <ProductosDestacados productos={destacados} />
     </>
   );
 }

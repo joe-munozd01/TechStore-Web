@@ -1,4 +1,5 @@
 'use client';
+import Link from "next/link";
 
 export function formatearPrecio(valor) {
   return "$" + valor.toLocaleString("es-CL");
@@ -13,7 +14,9 @@ export default function ProductCard({ producto, onAgregar = () => {} }) {
     <div className="card h-100 shadow-sm">
       <img src={producto.imagen} className="card-img-top" alt={producto.nombre} style={{ height: 180, objectFit: "contain" }} />
       <div className="card-body d-flex flex-column">
-        <h3 className="h6 card-title">{producto.nombre}</h3>
+        <h3 className="h6 card-title">
+          <Link href={"/productos/" + producto.id} className="text-reset text-decoration-none">{producto.nombre}</Link>
+        </h3>
         <p className="text-muted small mb-1">{producto.categoria} | {producto.marca}</p>
         <p className="mb-2">
           {enOferta ? (
