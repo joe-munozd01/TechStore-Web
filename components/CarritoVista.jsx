@@ -53,6 +53,9 @@ export default function CarritoVista() {
         <button type="button" className="btn btn-outline-secondary" onClick={vaciar}>Vaciar carrito</button>
         <p className="h5 mb-0">Total: <strong data-testid="total">{formatearPrecio(total)}</strong></p>
       </div>
+      <div className="text-end mt-3">
+        <Link href="/comprar" className="btn btn-success">Ir a pagar</Link>
+      </div>
     </>
   );
 }
