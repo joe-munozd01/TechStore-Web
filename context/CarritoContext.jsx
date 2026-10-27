@@ -2,6 +2,8 @@
 import { createContext, useContext, useState } from "react";
 import * as logica from "../lib/carrito";
 import { crearOrden } from "../lib/pago";
+import { registrarOrden, obtenerOrdenes, cargarOrdenesGuardadas } from "../data/ordenes";
+import { guardarJSON } from "../lib/almacenamiento";
 
 // Contexto: comparte el estado del carrito con cualquier componente (Navbar,
 // tarjetas, página del carrito) sin pasar props de uno en uno.
@@ -33,7 +35,11 @@ export function CarritoProvider({ children, inicial = [], ordenInicial = null })
     orden,
     // Guarda el resumen de la compra; si el pago fue exitoso, vacía el carrito.
     finalizarCompra: (datos, ok) => {
-      setOrden(crearOrden(datos, items, ok));
+      // Se registra la orden (pagada o rechazada) para que el administrador la vea.
+      cargarOrdenesGuardadas();
+      const nueva = registrarOrden(crearOrden(datos, items, ok));
+      guardarJSON("ts_ordenes", obtenerOrdenes());
+      setOrden(nueva);
       if (ok) setItems([]);
     },
   };

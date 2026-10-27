@@ -7,6 +7,7 @@ import { autenticar, registrarUsuario, exportarUsuarios, cargarUsuarios } from "
 // no se pierdan al recargar la página.
 const AuthContext = createContext({
   usuario: null,
+  listo: true,
   iniciarSesion: () => ({ ok: false, error: "Sin proveedor de sesión." }),
   registrar: () => ({ ok: false, error: "Sin proveedor de sesión." }),
   cerrarSesion: () => {},
@@ -22,6 +23,8 @@ function guardar(clave, valor) {
 
 export function AuthProvider({ children, usuarioInicial = null }) {
   const [usuario, setUsuario] = useState(usuarioInicial);
+  // "listo" pasa a true cuando ya se leyó la sesión guardada (evita parpadeos).
+  const [listo, setListo] = useState(false);
 
   // Al cargar la página: restaura usuarios registrados y la sesión guardada.
   useEffect(() => {
@@ -33,10 +36,12 @@ export function AuthProvider({ children, usuarioInicial = null }) {
     } catch {
       // Datos guardados dañados: se ignoran.
     }
+    setListo(true);
   }, []);
 
   const valor = {
     usuario,
+    listo,
     iniciarSesion: (correo, clave) => {
       const encontrado = autenticar(correo, clave);
       if (!encontrado) return { ok: false, error: "Correo o contraseña incorrectos." };
