@@ -1,7 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import Navbar from "../components/Navbar";
+import MarcoTienda from "../components/MarcoTienda";
 import { CarritoProvider } from "../context/CarritoContext";
 import { AuthProvider } from "../context/AuthContext";
+import { ProductosProvider } from "../context/ProductosContext";
 
 export const metadata = {
   title: "TechStore",
@@ -13,14 +14,12 @@ export default function RootLayout({ children }) {
     <html lang="es">
       <body>
         <AuthProvider>
-          <CarritoProvider>
-            <Navbar />
-            <main className="container py-4">{children}</main>
-          </CarritoProvider>
+          <ProductosProvider>
+            <CarritoProvider>
+              <MarcoTienda>{children}</MarcoTienda>
+            </CarritoProvider>
+          </ProductosProvider>
         </AuthProvider>
-        <footer className="container py-3 text-muted small border-top">
-          TechStore &copy; 2026 - DSY1104 Desarrollo Fullstack II
-        </footer>
       </body>
     </html>
   );

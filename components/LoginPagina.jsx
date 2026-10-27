@@ -14,7 +14,7 @@ export default function LoginPagina() {
 
   const entrar = ({ correo, clave }) => {
     const respuesta = iniciarSesion(correo, clave);
-    if (respuesta.ok) router.push("/");
+    if (respuesta.ok) router.push(respuesta.usuario.rol === "admin" ? "/admin" : "/");
     return respuesta;
   };
 
