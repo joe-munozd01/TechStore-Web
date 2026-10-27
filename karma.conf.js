@@ -13,8 +13,11 @@ module.exports = function (config) {
       devtool: false,
       resolve: {
         extensions: [".js", ".jsx"],
-        // Mock: en las pruebas, next/link se reemplaza por un <a> simple.
-        alias: { "next/link": path.resolve(__dirname, "tests/mocks/NextLinkMock.jsx") },
+        // Mocks: en las pruebas next/link y next/navigation se reemplazan por versiones simples.
+        alias: {
+          "next/link": path.resolve(__dirname, "tests/mocks/NextLinkMock.jsx"),
+          "next/navigation": path.resolve(__dirname, "tests/mocks/NextNavigationMock.jsx"),
+        },
       },
       module: {
         rules: [
@@ -29,7 +32,7 @@ module.exports = function (config) {
                   ["@babel/preset-react", { runtime: "automatic" }],
                 ],
                 // Mide la cobertura del código (components/ y data/), no de los tests.
-                plugins: [["istanbul", { exclude: ["tests/**", "**/*.spec.jsx", "**/NextLinkMock.jsx"] }]],
+                plugins: [["istanbul", { exclude: ["tests/**", "**/*.spec.jsx", "**/NextLinkMock.jsx", "**/NextNavigationMock.jsx"] }]],
               },
             },
           },
