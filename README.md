@@ -1,24 +1,24 @@
-# TechStore - Frontend
+# TechStore - Frontend con React (Next.js)
 
-Sitio web (HTML5, CSS, JavaScript) para la tienda online ficticia TechStore.
-Proyecto académico - 011D Desarrollo FullStack II (Duoc UC).
+Proyecto académico DSY1104 Desarrollo Fullstack II (Duoc UC) - Evaluación Parcial 2.
+Integrantes: Nicolás Figueroa, José Muñoz.
 
-## Integrantes
-- Nicolás Figueroa
-- Jose Muñoz
+## Tecnologías
+- Next.js + React (componentes con props y estado)
+- Bootstrap 5 (diseño responsivo)
+- Jasmine + Karma (pruebas unitarias, con cobertura)
+
+## Cómo ejecutar
+```bash
+npm install
+npm run dev        # sitio en http://localhost:3000
+npm test           # pruebas unitarias (Karma + Jasmine) y resumen de cobertura
+```
+El reporte de cobertura en HTML queda en `coverage/index.html`.
 
 ## Estructura
-- `index.html` - Página de inicio (productos destacados)
-- `productos.html` - Catálogo de productos
-- `producto-detalle.html` - Detalle de un producto y reseñas
-- `carrito.html` - Carrito de compra (JavaScript)
-- `registro.html` - Registro de usuario (formulario con validación JS)
-- `soporte.html` - Formulario de contacto / ticket de soporte (validación JS)
-- `nosotros.html` - Información de la tienda y el equipo
-- `css/estilo.css` - Hoja de estilos externa
-- `js/formularios.js` - Validación de los formularios de registro y soporte
-- `js/carrito.js` - Lógica del carrito de compra (objeto con métodos)
-
-## Pendiente
-- Reemplazar las imágenes de `https://placehold.co/...` por fotografías reales de los productos.
-- Conectar el frontend con el API Gateway de los microservicios (proyecto de Desarrollo FullStack I).
+- `app/` - páginas (rutas) de Next.js
+- `components/` - componentes React reutilizables
+- `data/productos.js` - fuente de datos simulada con CRUD
+- `tests/` - pruebas unitarias (`*.spec.jsx`)
+- `karma.conf.js` - configuración del entorno de pruebas
