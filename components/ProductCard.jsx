@@ -1,5 +1,6 @@
 'use client';
 import Link from "next/link";
+import { porcentajeDescuento } from "../lib/ofertas";
 
 export function formatearPrecio(valor) {
   return "$" + valor.toLocaleString("es-CL");
@@ -11,7 +12,10 @@ export default function ProductCard({ producto, onAgregar = () => {} }) {
   const enOferta = producto.precioOferta !== null && producto.precioOferta !== undefined;
 
   return (
-    <div className="card h-100 shadow-sm">
+    <div className="card h-100 shadow-sm position-relative">
+      {enOferta && (
+        <span className="badge text-bg-danger position-absolute top-0 start-0 m-2">-{porcentajeDescuento(producto)}%</span>
+      )}
       <img src={producto.imagen} className="card-img-top" alt={producto.nombre} style={{ height: 180, objectFit: "contain" }} />
       <div className="card-body d-flex flex-column">
         <h3 className="h6 card-title">

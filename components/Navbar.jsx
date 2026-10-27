@@ -25,6 +25,8 @@ export default function Navbar() {
           <ul className="navbar-nav me-auto">
             <li className="nav-item"><Link className="nav-link" href="/" onClick={() => setAbierto(false)}>Inicio</Link></li>
             <li className="nav-item"><Link className="nav-link" href="/productos" onClick={() => setAbierto(false)}>Productos</Link></li>
+            <li className="nav-item"><Link className="nav-link" href="/categorias" onClick={() => setAbierto(false)}>Categorías</Link></li>
+            <li className="nav-item"><Link className="nav-link" href="/ofertas" onClick={() => setAbierto(false)}>Ofertas</Link></li>
           </ul>
           <Link className="btn btn-light btn-sm" href="/carrito" onClick={() => setAbierto(false)}>
             Carrito
