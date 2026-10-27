@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCarrito } from "../context/CarritoContext";
+import { useAuth } from "../context/AuthContext";
 import FormularioCheckout from "./FormularioCheckout";
 import { formatearPrecio } from "./ProductCard";
 
@@ -11,6 +12,7 @@ import { formatearPrecio } from "./ProductCard";
 export default function CheckoutPagina() {
   const router = useRouter();
   const { items, total, orden, finalizarCompra } = useCarrito();
+  const { usuario } = useAuth();
   const [procesando, setProcesando] = useState(false);
 
   if (procesando) return <p>Procesando pago...</p>;
@@ -30,8 +32,11 @@ export default function CheckoutPagina() {
     router.push(exito ? "/comprar/ok" : "/comprar/error");
   };
 
-  // Si volvemos desde un pago con error, se recuperan los datos ingresados.
-  const datosIniciales = orden && !orden.ok ? orden.datos : undefined;
+  // Si volvemos desde un pago con error se recuperan los datos ingresados;
+  // si hay sesión iniciada, se completan nombre, apellidos y correo.
+  let datosIniciales;
+  if (orden && !orden.ok) datosIniciales = orden.datos;
+  else if (usuario) datosIniciales = { nombre: usuario.nombre, apellidos: usuario.apellidos, correo: usuario.correo };
 
   return (
     <div className="row g-4">

@@ -2,12 +2,14 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useCarrito } from "../context/CarritoContext";
+import { useAuth } from "../context/AuthContext";
 
 // Menú responsive: en pantallas pequeñas se colapsa y el botón lo abre/cierra
 // (estado "abierto"), usando las clases de Bootstrap.
 export default function Navbar() {
   const [abierto, setAbierto] = useState(false);
   const { unidades } = useCarrito();
+  const { usuario, cerrarSesion } = useAuth();
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container">
@@ -28,10 +30,23 @@ export default function Navbar() {
             <li className="nav-item"><Link className="nav-link" href="/categorias" onClick={() => setAbierto(false)}>Categorías</Link></li>
             <li className="nav-item"><Link className="nav-link" href="/ofertas" onClick={() => setAbierto(false)}>Ofertas</Link></li>
           </ul>
-          <Link className="btn btn-light btn-sm" href="/carrito" onClick={() => setAbierto(false)}>
-            Carrito
-            {unidades > 0 && <span className="badge text-bg-primary ms-2">{unidades}</span>}
-          </Link>
+          <div className="d-flex flex-wrap align-items-center gap-2">
+            {usuario ? (
+              <>
+                <span className="navbar-text text-white me-1">Hola, {usuario.nombre}</span>
+                <button type="button" className="btn btn-outline-light btn-sm" onClick={() => { cerrarSesion(); setAbierto(false); }}>Cerrar sesión</button>
+              </>
+            ) : (
+              <>
+                <Link className="btn btn-outline-light btn-sm" href="/login" onClick={() => setAbierto(false)}>Iniciar sesión</Link>
+                <Link className="btn btn-outline-light btn-sm" href="/registro" onClick={() => setAbierto(false)}>Crear cuenta</Link>
+              </>
+            )}
+            <Link className="btn btn-light btn-sm" href="/carrito" onClick={() => setAbierto(false)}>
+              Carrito
+              {unidades > 0 && <span className="badge text-bg-primary ms-2">{unidades}</span>}
+            </Link>
+          </div>
         </div>
       </div>
     </nav>
