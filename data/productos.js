@@ -1,3 +1,5 @@
+import { crearSlug, categoriasDe, porCategoria, ofertasDe } from "../lib/catalogo";
+
 // ===== Fuente de datos simulada (hace de "base de datos" de la tienda) =====
 // Operaciones CRUD sobre un arreglo en memoria:
 //   Crear -> crearProducto | Leer -> obtenerProductos / obtenerProductoPorId
@@ -54,37 +56,23 @@ export function reiniciarProductos() {
 }
 
 // ===== Categorías y ofertas =====
+// (la lógica de filtrado está en lib/catalogo.js)
 
-// "Periféricos" -> "perifericos" (se usa en la URL de la categoría).
-export function crearSlug(texto) {
-  return texto
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-");
-}
+export { crearSlug };
 
-// Lista de categorías con la cantidad de productos de cada una.
 export function obtenerCategorias() {
-  const cantidades = {};
-  productos.forEach((p) => {
-    cantidades[p.categoria] = (cantidades[p.categoria] || 0) + 1;
-  });
-  return Object.keys(cantidades).map((nombre) => ({
-    nombre,
-    slug: crearSlug(nombre),
-    cantidad: cantidades[nombre],
-  }));
+  return categoriasDe(productos);
 }
 
 export function obtenerProductosPorCategoria(slug) {
-  return productos.filter((p) => crearSlug(p.categoria) === slug).map((p) => ({ ...p }));
+  return porCategoria(productos, slug).map((p) => ({ ...p }));
 }
 
-// Productos que tienen precio de oferta.
 export function obtenerOfertas() {
-  return productos
-    .filter((p) => p.precioOferta !== null && p.precioOferta !== undefined)
-    .map((p) => ({ ...p }));
+  return ofertasDe(productos).map((p) => ({ ...p }));
+}
+
+// Reemplaza todos los productos (se usa al restaurar los datos guardados).
+export function cargarProductos(lista) {
+  productos = lista.map((p) => ({ ...p }));
 }
