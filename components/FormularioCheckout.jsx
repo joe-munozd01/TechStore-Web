@@ -3,19 +3,9 @@ import { useState } from "react";
 import { regiones, comunasDe } from "../data/zonas";
 import { validarCheckout } from "../lib/validaciones";
 import { formatearPrecio } from "./ProductCard";
+import Campo from "./Campo";
 
 const vacio = { nombre: "", apellidos: "", correo: "", calle: "", departamento: "", region: "", comuna: "", indicaciones: "" };
-
-// Un campo de formulario con su etiqueta y su mensaje de error (clases de Bootstrap).
-function Campo({ id, etiqueta, error, children }) {
-  return (
-    <div className="mb-3">
-      <label htmlFor={id} className="form-label">{etiqueta}</label>
-      {children}
-      {error && <div className="invalid-feedback d-block">{error}</div>}
-    </div>
-  );
-}
 
 // Formulario de datos del cliente y dirección de entrega.
 // Valida al enviar; si todo está bien llama a onConfirmar(datos, simularError).
