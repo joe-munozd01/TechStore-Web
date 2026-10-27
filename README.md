@@ -1,6 +1,6 @@
 # TechStore - Frontend con React (Next.js)
 
-Proyecto académico DSY1104 Desarrollo Fullstack II (Duoc UC) - Evaluación Parcial 2.
+DSY1104 Desarrollo Fullstack II
 Integrantes: Nicolás Figueroa, José Muñoz.
 
 ## Tecnologías
