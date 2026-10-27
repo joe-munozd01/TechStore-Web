@@ -52,3 +52,39 @@ export function eliminarProducto(id) {
 export function reiniciarProductos() {
   productos = productosIniciales.map((p) => ({ ...p }));
 }
+
+// ===== Categorías y ofertas =====
+
+// "Periféricos" -> "perifericos" (se usa en la URL de la categoría).
+export function crearSlug(texto) {
+  return texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-");
+}
+
+// Lista de categorías con la cantidad de productos de cada una.
+export function obtenerCategorias() {
+  const cantidades = {};
+  productos.forEach((p) => {
+    cantidades[p.categoria] = (cantidades[p.categoria] || 0) + 1;
+  });
+  return Object.keys(cantidades).map((nombre) => ({
+    nombre,
+    slug: crearSlug(nombre),
+    cantidad: cantidades[nombre],
+  }));
+}
+
+export function obtenerProductosPorCategoria(slug) {
+  return productos.filter((p) => crearSlug(p.categoria) === slug).map((p) => ({ ...p }));
+}
+
+// Productos que tienen precio de oferta.
+export function obtenerOfertas() {
+  return productos
+    .filter((p) => p.precioOferta !== null && p.precioOferta !== undefined)
+    .map((p) => ({ ...p }));
+}
