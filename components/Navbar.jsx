@@ -29,6 +29,9 @@ export default function Navbar() {
             <li className="nav-item"><Link className="nav-link" href="/productos" onClick={() => setAbierto(false)}>Productos</Link></li>
             <li className="nav-item"><Link className="nav-link" href="/categorias" onClick={() => setAbierto(false)}>Categorías</Link></li>
             <li className="nav-item"><Link className="nav-link" href="/ofertas" onClick={() => setAbierto(false)}>Ofertas</Link></li>
+            <li className="nav-item"><Link className="nav-link" href="/nosotros" onClick={() => setAbierto(false)}>Nosotros</Link></li>
+            <li className="nav-item"><Link className="nav-link" href="/blog" onClick={() => setAbierto(false)}>Blog</Link></li>
+            <li className="nav-item"><Link className="nav-link" href="/contacto" onClick={() => setAbierto(false)}>Contacto</Link></li>
           </ul>
           <div className="d-flex flex-wrap align-items-center gap-2">
             {usuario ? (
