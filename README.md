@@ -2,6 +2,49 @@
 
 DSY1104 Desarrollo Fullstack II - Evaluación Parcial 3 (integración con backend). Integrantes: Nicolás Figueroa, José Muñoz.
 
+## Demo rápida para la presentación
+
+Orden para levantar todo (dos terminales):
+
+```bash
+# Terminal 1 - Backend (repo TechStore-Microservicios)
+cd ~/TechStore-Microservicios
+docker compose up --build -d
+docker compose ps            # todos deben decir Up / running; esperar 1-2 min a que se registren en Eureka
+
+# Comprobar que el login del backend responde (debe devolver un token):
+curl -s -X POST http://localhost:8090/api/v1/auth/login -H "Content-Type: application/json" -d '{"correo":"admin@techstore.cl","password":"Admin123"}'
+
+# Terminal 2 - Frontend (este repo)
+cd ~/TechStore-Web
+npm install
+npm run dev                  # http://localhost:3000
+```
+
+| Qué mostrar (indicador de la pauta) | Cómo |
+| --- | --- |
+| Backend, BD y Swagger (IE3.1, IE3.2) | http://localhost:8090/swagger-ui/index.html (selector arriba a la derecha para cada microservicio) y http://localhost:8761 (Eureka) |
+| Integración REST (IE3.2.2) | Login en `/login` → F12 → Red → filtrar `8090` → petición `login` y `usuarios` |
+| JWT con roles (IE3.3.1) | Respuesta del login: `token` + `rol`; cabecera `Authorization: Bearer ...` en la petición `usuarios` |
+| Sesión persistente (IE3.3.2) | F12 → Almacenamiento → Local Storage → `ts_sesion`; recargar con F5 y la sesión sigue |
+| Restricción por rol (IE3.3.3) | Entrar como cliente y abrir `/admin` → "No tienes permisos"; sin sesión → pide iniciar sesión |
+| Seguridad en el backend | Comandos de abajo: sin token **401**, cliente **403**, admin **200** |
+
+```bash
+# 401: sin token
+curl -i http://localhost:8090/api/v1/usuarios
+
+# 403: token de cliente
+TOKEN=$(curl -s -X POST http://localhost:8090/api/v1/auth/login -H "Content-Type: application/json" -d '{"correo":"cliente@techstore.cl","password":"Cliente123"}' | sed 's/.*"token":"\([^"]*\)".*/\1/')
+curl -i http://localhost:8090/api/v1/usuarios -H "Authorization: Bearer $TOKEN"
+
+# 200: token de admin
+TOKEN=$(curl -s -X POST http://localhost:8090/api/v1/auth/login -H "Content-Type: application/json" -d '{"correo":"admin@techstore.cl","password":"Admin123"}' | sed 's/.*"token":"\([^"]*\)".*/\1/')
+curl -i http://localhost:8090/api/v1/usuarios -H "Authorization: Bearer $TOKEN"
+```
+
+Para apagar el backend al terminar: `docker compose down` (en la carpeta del backend).
+
 ## Tecnologías
 
 - Next.js + React (componentes con props y estado)
