@@ -1,21 +1,31 @@
 'use client';
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { obtenerUsuarios } from "../../data/usuarios";
+import { listarUsuariosApi } from "../../lib/api";
 import { ventasTotales, ticketPromedio, unidadesPorProducto } from "../../lib/reportes";
 import { formatearPrecio } from "../ProductCard";
 import useOrdenes from "./useOrdenes";
 
 export function AdminUsuarios() {
-  const { listo } = useAuth();
+  const { token } = useAuth();
   const ordenes = useOrdenes();
-  // Se vuelve a leer cuando la sesión termina de cargar (ahí se restauran las cuentas guardadas).
-  const usuarios = useMemo(() => obtenerUsuarios(), [listo]);
+  const [usuarios, setUsuarios] = useState([]);
+  const [error, setError] = useState("");
+
+  // Los usuarios vienen del backend (GET /api/v1/usuarios, solo ADMIN, con el JWT).
+  useEffect(() => {
+    if (!token) return;
+    listarUsuariosApi(token).then((r) => {
+      if (r.ok) setUsuarios(r.usuarios);
+      else setError(r.error);
+    });
+  }, [token]);
   const comprasDe = (correo) => ordenes.filter((o) => o.ok && o.datos.correo.toLowerCase() === correo.toLowerCase()).length;
 
   return (
     <>
       <h1 className="h3 mb-3">Usuarios</h1>
+      {error && <div className="alert alert-danger" role="alert">{error}</div>}
       <div className="table-responsive">
         <table className="table table-striped align-middle bg-white">
           <thead><tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Compras</th></tr></thead>
@@ -23,7 +33,7 @@ export function AdminUsuarios() {
             {usuarios.map((u) => (
               <tr key={u.id}>
                 <td>{u.id}</td>
-                <td>{u.nombre} {u.apellidos}</td>
+                <td>{u.nombre}</td>
                 <td>{u.correo}</td>
                 <td><span className={"badge " + (u.rol === "admin" ? "text-bg-dark" : "text-bg-secondary")}>{u.rol}</span></td>
                 <td>{comprasDe(u.correo)}</td>

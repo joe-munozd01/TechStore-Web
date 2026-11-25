@@ -12,8 +12,8 @@ export default function RegistroPagina() {
     return <div className="alert alert-info">Ya tienes una sesión iniciada como {usuario.nombre}. <Link href="/">Ir al inicio</Link></div>;
   }
 
-  const crear = (datos) => {
-    const respuesta = registrar(datos);
+  const crear = async (datos) => {
+    const respuesta = await registrar(datos);
     if (respuesta.ok) router.push("/");
     return respuesta;
   };

@@ -15,13 +15,13 @@ export default function FormularioRegistro({ onEnviar }) {
   const cambiar = (e) => setDatos((d) => ({ ...d, [e.target.name]: e.target.value }));
   const clase = (campo) => "form-control" + (errores[campo] ? " is-invalid" : "");
 
-  const enviar = (e) => {
+  const enviar = async (e) => {
     e.preventDefault();
     const nuevos = validarRegistro(datos);
     setErrores(nuevos);
     setErrorGeneral("");
     if (Object.keys(nuevos).length > 0) return;
-    const respuesta = onEnviar(datos);
+    const respuesta = await onEnviar(datos);
     if (respuesta && !respuesta.ok) setErrorGeneral(respuesta.error);
   };
 

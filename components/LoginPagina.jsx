@@ -12,8 +12,8 @@ export default function LoginPagina() {
     return <div className="alert alert-info">Ya iniciaste sesión como {usuario.nombre}. <Link href="/">Ir al inicio</Link></div>;
   }
 
-  const entrar = ({ correo, clave }) => {
-    const respuesta = iniciarSesion(correo, clave);
+  const entrar = async ({ correo, clave }) => {
+    const respuesta = await iniciarSesion(correo, clave);
     if (respuesta.ok) router.push(respuesta.usuario.rol === "admin" ? "/admin" : "/");
     return respuesta;
   };
@@ -24,7 +24,8 @@ export default function LoginPagina() {
         <h1 className="h3 mb-3">Iniciar sesión</h1>
         <FormularioLogin onEnviar={entrar} />
         <p className="mt-3 mb-1">¿No tienes cuenta? <Link href="/registro">Crear cuenta</Link></p>
-        <p className="text-muted small">Cuenta de prueba: cliente@techstore.cl / Cliente123</p>
+        <p className="text-muted small mb-0">Cuenta cliente: cliente@techstore.cl / Cliente123</p>
+        <p className="text-muted small">Cuenta administrador: admin@techstore.cl / Admin123</p>
       </div>
     </div>
   );

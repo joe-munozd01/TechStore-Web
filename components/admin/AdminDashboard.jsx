@@ -1,9 +1,9 @@
 'use client';
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useProductos } from "../../context/ProductosContext";
 import { useAuth } from "../../context/AuthContext";
-import { obtenerUsuarios } from "../../data/usuarios";
+import { listarUsuariosApi } from "../../lib/api";
 import { criticosDe } from "../../lib/catalogo";
 import { ventasTotales } from "../../lib/reportes";
 import { formatearPrecio } from "../ProductCard";
@@ -32,9 +32,14 @@ const accesos = [
 
 export default function AdminDashboard() {
   const { productos } = useProductos();
-  const { listo } = useAuth();
+  const { token } = useAuth();
   const ordenes = useOrdenes();
-  const usuarios = useMemo(() => obtenerUsuarios(), [listo]);
+  const [usuarios, setUsuarios] = useState([]);
+  // Cantidad de cuentas: se consulta al backend con el JWT del administrador.
+  useEffect(() => {
+    if (!token) return;
+    listarUsuariosApi(token).then((r) => r.ok && setUsuarios(r.usuarios));
+  }, [token]);
   const pagadas = ordenes.filter((o) => o.ok);
 
   return (

@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 
 // Configuración de Karma: ejecuta las pruebas Jasmine (tests/**/*.spec.jsx).
 // webpack + babel convierten el JSX; jsdom simula el navegador (DOM) sin abrir ventanas.
@@ -11,6 +12,8 @@ module.exports = function (config) {
     webpack: {
       mode: "development",
       devtool: false,
+      // En Next.js process.env.NEXT_PUBLIC_API_URL lo reemplaza el framework; en Karma lo hacemos aquí.
+      plugins: [new webpack.DefinePlugin({ "process.env.NEXT_PUBLIC_API_URL": JSON.stringify("http://localhost:8090") })],
       resolve: {
         extensions: [".js", ".jsx"],
         // Mocks: en las pruebas next/link y next/navigation se reemplazan por versiones simples.

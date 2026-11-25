@@ -36,7 +36,11 @@ export default function CheckoutPagina() {
   // si hay sesión iniciada, se completan nombre, apellidos y correo.
   let datosIniciales;
   if (orden && !orden.ok) datosIniciales = orden.datos;
-  else if (usuario) datosIniciales = { nombre: usuario.nombre, apellidos: usuario.apellidos, correo: usuario.correo };
+  else if (usuario) {
+    // El backend guarda "Nombre Apellidos" en un solo campo: se separa la primera palabra.
+    const [nombre, ...apellidos] = (usuario.nombre || "").split(" ");
+    datosIniciales = { nombre, apellidos: apellidos.join(" "), correo: usuario.correo };
+  }
 
   return (
     <div className="row g-4">

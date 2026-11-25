@@ -12,13 +12,13 @@ export default function FormularioLogin({ onEnviar }) {
 
   const cambiar = (e) => setDatos((d) => ({ ...d, [e.target.name]: e.target.value }));
 
-  const enviar = (e) => {
+  const enviar = async (e) => {
     e.preventDefault();
     const nuevos = validarLogin(datos);
     setErrores(nuevos);
     setErrorGeneral("");
     if (Object.keys(nuevos).length > 0) return;
-    const respuesta = onEnviar(datos);
+    const respuesta = await onEnviar(datos);
     if (respuesta && !respuesta.ok) setErrorGeneral(respuesta.error);
   };
 

@@ -1,21 +1,22 @@
 'use client';
 import { createContext, useContext, useEffect, useState } from "react";
-import { autenticar, registrarUsuario, exportarUsuarios, cargarUsuarios } from "../data/usuarios";
+import { loginApi, registroApi, tokenExpirado } from "../lib/api";
 
-// Contexto de sesión: guarda quién inició sesión y ofrece login, registro y logout.
-// Los usuarios registrados y la sesión se guardan en localStorage para que
-// no se pierdan al recargar la página.
+// Contexto de sesión: guarda quién inició sesión (y su token JWT) y ofrece
+// login, registro y logout contra el backend. La sesión se guarda en
+// localStorage ("ts_sesion") para que no se pierda al recargar la página.
 const AuthContext = createContext({
   usuario: null,
+  token: null,
   listo: true,
-  iniciarSesion: () => ({ ok: false, error: "Sin proveedor de sesión." }),
-  registrar: () => ({ ok: false, error: "Sin proveedor de sesión." }),
+  iniciarSesion: async () => ({ ok: false, error: "Sin proveedor de sesión." }),
+  registrar: async () => ({ ok: false, error: "Sin proveedor de sesión." }),
   cerrarSesion: () => {},
 });
 
-function guardar(clave, valor) {
+function guardarSesion(sesion) {
   try {
-    localStorage.setItem(clave, JSON.stringify(valor));
+    localStorage.setItem("ts_sesion", JSON.stringify(sesion));
   } catch {
     // Si el navegador no permite localStorage, la app sigue funcionando sin guardar.
   }
@@ -23,43 +24,49 @@ function guardar(clave, valor) {
 
 export function AuthProvider({ children, usuarioInicial = null }) {
   const [usuario, setUsuario] = useState(usuarioInicial);
+  const [token, setToken] = useState(null);
   // "listo" pasa a true cuando ya se leyó la sesión guardada (evita parpadeos).
   const [listo, setListo] = useState(false);
 
-  // Al cargar la página: restaura usuarios registrados y la sesión guardada.
+  // Al cargar la página: restaura la sesión guardada si el token no ha expirado.
   useEffect(() => {
     try {
-      const usuariosGuardados = localStorage.getItem("ts_usuarios");
-      if (usuariosGuardados) cargarUsuarios(JSON.parse(usuariosGuardados));
-      const sesion = localStorage.getItem("ts_sesion");
-      if (sesion && !usuarioInicial) setUsuario(JSON.parse(sesion));
+      const guardada = JSON.parse(localStorage.getItem("ts_sesion"));
+      if (guardada && guardada.token && !tokenExpirado(guardada.token) && !usuarioInicial) {
+        setUsuario(guardada.usuario);
+        setToken(guardada.token);
+      } else if (guardada) {
+        localStorage.removeItem("ts_sesion");
+      }
     } catch {
       // Datos guardados dañados: se ignoran.
     }
     setListo(true);
   }, []);
 
+  const abrirSesion = (r) => {
+    setUsuario(r.usuario);
+    setToken(r.token);
+    guardarSesion({ token: r.token, usuario: r.usuario });
+  };
+
   const valor = {
     usuario,
+    token,
     listo,
-    iniciarSesion: (correo, clave) => {
-      const encontrado = autenticar(correo, clave);
-      if (!encontrado) return { ok: false, error: "Correo o contraseña incorrectos." };
-      setUsuario(encontrado);
-      guardar("ts_sesion", encontrado);
-      return { ok: true, usuario: encontrado };
+    iniciarSesion: async (correo, clave) => {
+      const r = await loginApi(correo, clave);
+      if (r.ok) abrirSesion(r);
+      return r;
     },
-    registrar: (datos) => {
-      const resultado = registrarUsuario(datos);
-      if (resultado.ok) {
-        guardar("ts_usuarios", exportarUsuarios());
-        setUsuario(resultado.usuario);
-        guardar("ts_sesion", resultado.usuario);
-      }
-      return resultado;
+    registrar: async (datos) => {
+      const r = await registroApi(datos);
+      if (r.ok) abrirSesion(r);
+      return r;
     },
     cerrarSesion: () => {
       setUsuario(null);
+      setToken(null);
       try {
         localStorage.removeItem("ts_sesion");
       } catch {
